@@ -11,3 +11,5 @@ Wait for activity to show the Fingerprint dialog, then emulate the fingerprint
 ```bash
 adb -e emu finger touch 1111
 ```
+
+<img src="https://raw.githubusercontent.com/Urucas/android-fingerprint-example/master/screen.gif" />
