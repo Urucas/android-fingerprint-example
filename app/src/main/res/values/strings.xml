@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">FingerprintExample</string>
+    <string name="go_2_settings"><![CDATA[Secure lock screen hasn\'t set up. \nGo to \'Settings -> Security -> Fingerprint\' to set up a fingerprint]]></string>
+    <string name="must_accept_fingerprint_permission">Fingerprint permissions not granted</string>
+    <string name="close_app">Close App with Fingerprint</string>
+    <string name="fingerprint_hint">Touche Sensor</string>
+    <string name="fingerprint_description">Confirm fingerprint to close</string>
+    <string name="user_authenticated">Fingerprint authenticated successfully</string>
+    <string name="user_not_authenticated">Error authenticating fingerprint</string>
+    <string name="checking_secure_n_permissions">checking enabled permissions and security settings...</string>
+</resources>
