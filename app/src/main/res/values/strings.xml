@@ -4,8 +4,9 @@
     <string name="must_accept_fingerprint_permission">Fingerprint permissions not granted</string>
     <string name="close_app">Close App with Fingerprint</string>
     <string name="fingerprint_hint">Touche Sensor</string>
-    <string name="fingerprint_description">Confirm fingerprint to close</string>
+    <string name="fingerprint_description">Confirm fingerprint to enter the Secret Area</string>
     <string name="user_authenticated">Fingerprint authenticated successfully</string>
     <string name="user_not_authenticated">Error authenticating fingerprint</string>
     <string name="checking_secure_n_permissions">checking enabled permissions and security settings...</string>
+    <string name="secret_area">Secret Area</string>
 </resources>

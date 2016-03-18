@@ -1,9 +1,10 @@
-package com.urucas.fingerprintexample;
+package com.example.fingerprint;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.KeyguardManager;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
@@ -57,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
             if(result.getCryptoObject().equals(this.cryptoObject)) {
                 dialog.dismiss();
                 Toast.makeText(MainActivity.this, R.string.user_authenticated, Toast.LENGTH_SHORT).show();
-                finish();
+                Intent intent = new Intent(MainActivity.this, SecretActivity.class);
+                startActivity(intent);
             }else{
                 Toast.makeText(MainActivity.this, R.string.user_not_authenticated, Toast.LENGTH_LONG).show();
             }
